@@ -7,7 +7,6 @@ on:
 # Required to get the ID Token that will be used for OIDC
 permissions:
   id-token: write
-  contents: read # needed for private repos to checkout
 
 jobs:
   aws:
@@ -23,6 +22,9 @@ jobs:
           role-to-assume: arn:aws:iam::441564410720:role/sts-lab-2-target
           role-session-name: OIDCSession
 
+      - run: aws s3 ls
+        shell: bash
+        
       - run: aws sts get-caller-identity
         shell: bash
 
