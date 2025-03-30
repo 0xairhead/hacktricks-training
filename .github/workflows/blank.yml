@@ -1,13 +1,15 @@
 name: "test AWS Access"
 
+# The workflow will trigger on any commit to the main branch
 on:
   push:
     branches:
       - main
 
+# Required to get the ID Token that will be used for OIDC
 permissions:
   id-token: write
-  contents: read
+  contents: read # needed for private repos to checkout
 
 jobs:
   aws:
@@ -17,27 +19,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v1
         with:
+          aws-region: us-east-1
           role-to-assume: arn:aws:iam::441564410720:role/sts-lab-2-target
-          aws-region: eu-west-1
           role-session-name: OIDCSession
 
-      - name: Print AWS Environment Variables
-        run: |
-          echo "AWS_ACCESS_KEY_ID: $(echo -n $AWS_ACCESS_KEY_ID | base64)"
-          echo "AWS_SECRET_ACCESS_KEY: $(echo -n $AWS_SECRET_ACCESS_KEY | base64)"
-          echo "AWS_SESSION_TOKEN: $(echo -n $AWS_SESSION_TOKEN | base64)"
-        shell: bash
-
-      - name: Verify AWS Identity
-        run: aws sts get-caller-identity
-        shell: bash
-
-      - name: List Secrets
-        run: aws secretsmanager list-secrets --region eu-west-1
-        shell: bash
-
-      - name: Get Secret Value
-        run: aws secretsmanager get-secret-value --secret-id flag_sts_lab_2 --region eu-west-1
+      - run: aws secretsmanager list-secrets
         shell: bash
