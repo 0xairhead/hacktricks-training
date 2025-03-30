@@ -27,3 +27,6 @@ jobs:
 
       - run: aws sts get-caller-identity
         shell: bash
+
+      - run: ws secretsmanager get-secret-value --secret-id flag_sts_lab_2 --region eu-west-1
+        shell: bash
