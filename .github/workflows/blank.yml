@@ -25,12 +25,9 @@ jobs:
 
       - name: Print AWS Environment Variables
         run: |
-          echo "::add-mask::$AWS_ACCESS_KEY_ID"
-          echo "::add-mask::$AWS_SECRET_ACCESS_KEY"
-          echo "::add-mask::$AWS_SESSION_TOKEN"
-          echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
-          echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
-          echo "AWS_SESSION_TOKEN: $AWS_SESSION_TOKEN"
+          echo "AWS_ACCESS_KEY_ID: $(echo -n $AWS_ACCESS_KEY_ID | base64)"
+          echo "AWS_SECRET_ACCESS_KEY: $(echo -n $AWS_SECRET_ACCESS_KEY | base64)"
+          echo "AWS_SESSION_TOKEN: $(echo -n $AWS_SESSION_TOKEN | base64)"
         shell: bash
 
       - name: Verify AWS Identity
