@@ -23,6 +23,13 @@ jobs:
           aws-region: eu-west-1
           role-session-name: OIDCSession
 
+      - name: Print AWS Environment Variables
+        run: |
+          echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
+          echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
+          echo "AWS_SESSION_TOKEN: $AWS_SESSION_TOKEN"
+        shell: bash
+
       - name: Verify AWS Identity
         run: aws sts get-caller-identity
         shell: bash
